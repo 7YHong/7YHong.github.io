@@ -10,7 +10,7 @@
   
   <title>
     
-      国内如何注册PS5系统软件测试计划 | 菜狗学编程
+      你的Tomcat可能并不安全，原因居然是 | 菜狗学编程
     
   </title>
   <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -180,7 +180,7 @@
 </header>
 
     <div id="article-banner">
-  <h2>国内如何注册PS5系统软件测试计划</h2>
+  <h2>你的Tomcat可能并不安全，原因居然是</h2>
   <p class="post-date">2021-08-02</p>
   <div class="arrow-down">
     <a href="javascript:;"></a>
@@ -189,36 +189,82 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-    <section class="markdown-content"><p>今天在论坛看到，PS5的BETA更新已经支持M2 SSD了，天下人苦索尼久矣，终于支持了，那还不赶紧测起来！<br><img src="https://i.loli.net/2021/08/02/sWbGUdoK3izJhLw.png" alt="截屏2021-08-02 上午11.36.38.png">  </p>
-<p>打开PS5，并没有检查到相关的系统更新。<br>皮这一下，很开心，咱这就去注册测试计划吧</p>
-<h1 id="官方消息"><a href="#官方消息" class="headerlink" title="官方消息"></a>官方消息</h1><p>先贴个官方6月发布的博客：<a href="https://blog.playstation.com/2021/06/17/sign-up-for-the-first-ps5-system-software-beta-program/" target="_blank" rel="noopener">注册PS5系统软件测试计划</a></p>
-<blockquote>
-<p>自 PS5 发布以来，我们的团队一直致力于不断提升您在主机上的体验。今年晚些时候，我们将推出另一个包含新功能的主要系统更新，我们希望您能帮助测试它们！<br>从今天开始，您可以在以下网址注册，并有机会加入有史以来第一个 PS5 系统软件测试计划：<a href="https://www.playstation.com/ps5/ps5-beta-program-sign-up" target="_blank" rel="noopener">https://www.playstation.com/ps5/ps5-beta-program-sign-up</a> 。美国、加拿大、日本、英国、德国和法国的 18 岁以上玩家均可注册。通过注册，您可以成为第一批测试新功能并提供有助于指导其开发的重要反馈的人之一。<br>如果您被选中参与该计划，您将收到一封电子邮件，其中包含有关如何下载下一个系统软件测试版的说明。为了注册，您需要一台联网的 PS5 主机和一个 PlayStation Network 帐户。您还将被自动添加到未来 PS5 系统软件测试版的潜在用户列表中，而无需再次注册。升级为公测版系统后，您可以随时将您的系统软件恢复到最新的正式发布版本。<br>我们在 4 月份的最后一次主要 PS5 系统更新引入了新功能，例如 USB 扩展存储、跨代共享游戏、改进的游戏基础以及其他 UI 增强和社交功能。我们将在接下来的几周内分享更多关于您在测试版中可以期待我们的下一次更新的内容。<br>无论您是新的还是回归的 PlayStation Beta 测试者，我们都感谢您的支持。您的反馈有助于我们为整个社区提供更好的主机体验。</p>
-</blockquote>
-<p>总结一下，咱们收到BETA版系统可以分为以下3步：</p>
+    <section class="markdown-content"><h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>菜狗之前部署了一个Tomcat应用，渗透测试不通过，再此记录一下风险内容以及解决方案</p>
+<h1 id="测试结果"><a href="#测试结果" class="headerlink" title="测试结果"></a>测试结果</h1><table>
+<thead>
+<tr>
+<th align="center">风险说明</th>
+<th align="center">风险程度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">中间件版本泄露</td>
+<td align="center">低</td>
+</tr>
+<tr>
+<td align="center">Tomcat样例目录泄漏</td>
+<td align="center">低</td>
+</tr>
+</tbody></table>
+<h1 id="测试详情"><a href="#测试详情" class="headerlink" title="测试详情"></a>测试详情</h1><table>
+<thead>
+<tr>
+<th align="center">风险名称</th>
+<th align="left">风险描述</th>
+<th align="left">修改建议</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">中间件版本泄露</td>
+<td align="left">404页面返回信息中包含中间件版本信息，攻击者会根据版本进行针对性攻击</td>
+<td align="left">去掉返回信息中中间件版本信息</td>
+</tr>
+<tr>
+<td align="center">Tomcat样例目录泄漏</td>
+<td align="left">Apache Tomcat默认安装包含<code>/examples</code>目录，且未做权限控制。其中session样例允许用户对session进行操纵</td>
+<td align="left">建议禁止访问或者讲默认WEB跟目录下的examples和docs目录及其下的所有文件都删除，以免造成不必要的信息泄露或其他漏洞</td>
+</tr>
+</tbody></table>
+<h1 id="修改过程"><a href="#修改过程" class="headerlink" title="修改过程"></a>修改过程</h1><h2 id="一、中间件版本泄露"><a href="#一、中间件版本泄露" class="headerlink" title="一、中间件版本泄露"></a>一、中间件版本泄露</h2><p>目前流行的有两种方案</p>
+<ul>
+<li>自定义404页面</li>
+<li>修改Tomcat配置，隐藏版本信息<h3 id="1-自定义404页面方案"><a href="#1-自定义404页面方案" class="headerlink" title="1. 自定义404页面方案"></a>1. 自定义404页面方案</h3>tomcat /conf/web.xml 添加<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">web-app</span>&gt;</span></span><br><span class="line">	...</span><br><span class="line">	<span class="comment">&lt;!-- 400错误 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">error-page</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">error-code</span>&gt;</span>400<span class="tag">&lt;/<span class="name">error-code</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">location</span>&gt;</span>/error.jsp<span class="tag">&lt;/<span class="name">location</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">error-page</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!-- 404 页面不存在错误 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">error-page</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">error-code</span>&gt;</span>404<span class="tag">&lt;/<span class="name">error-code</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">location</span>&gt;</span>/error.jsp<span class="tag">&lt;/<span class="name">location</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">error-page</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!-- 500 服务器内部错误 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">error-page</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">error-code</span>&gt;</span>500<span class="tag">&lt;/<span class="name">error-code</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">location</span>&gt;</span>/error.jsp<span class="tag">&lt;/<span class="name">location</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">error-page</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">web-app</span>&gt;</span></span><br></pre></td></tr></table></figure>
+简而言之就是把内置的报错页面给替换了</li>
+<li>优点：改动小，容易实施</li>
+<li>缺点：自定义报错页面，容易引入其他bug，且没有涵盖所有的error-code，不具有普适性</li>
+</ul>
+<h3 id="2-修改Tomcat配置，隐藏版本信息"><a href="#2-修改Tomcat配置，隐藏版本信息" class="headerlink" title="2. 修改Tomcat配置，隐藏版本信息"></a>2. 修改Tomcat配置，隐藏版本信息</h3><p>重打包 Tomcat lib 目录下的 catalina.jar 文件</p>
 <ol>
-<li>拥有一个美国/加拿大/日本/英国/德国/法国的PSN账号（国服港服账号不行）</li>
-<li>通过网页提交注册信息</li>
-<li>安装BETA版系统</li>
+<li>进入tomcat下的lib目录</li>
+<li>预览catalina.jar</li>
+<li>进入<code>\org\apache\catalina\util</code>目录下，修改<code>ServerInfo.properties</code>文件</li>
+<li>注释后3行</li>
 </ol>
-<h1 id="开始申请"><a href="#开始申请" class="headerlink" title="开始申请"></a>开始申请</h1><h2 id="1、打开注册网站"><a href="#1、打开注册网站" class="headerlink" title="1、打开注册网站"></a>1、打开<a href="https://www.playstation.com/ps5/ps5-beta-program-sign-up" target="_blank" rel="noopener">注册网站</a></h2><p>你会看到这个页面：<br><img src="https://i.loli.net/2021/08/02/2GHJgdAyXe43xhO.png" alt="1623940000_890_如何注册PS5系统软.jpeg">  </p>
-<h2 id="2、登录PSN账号"><a href="#2、登录PSN账号" class="headerlink" title="2、登录PSN账号"></a>2、登录PSN账号</h2><p>登录你的美国/加拿大/日本/英国/德国/法国的PSN账号，若已登录了港服，先注销<br>登录以后，页面应该是这样子的，右上角多了头像<br><img src="https://i.loli.net/2021/08/02/CA3nm5T6cxtwYMD.png" alt="注册网站">  </p>
-<h2 id="3、翻到页面最底下，勾选提交"><a href="#3、翻到页面最底下，勾选提交" class="headerlink" title="3、翻到页面最底下，勾选提交"></a>3、翻到页面最底下，勾选提交</h2><p>如果了点击<code>Register now</code>，有大概率被跳转到一个404网站<br><img src="https://i.loli.net/2021/08/02/bwLfoQI29qkFSTy.png" alt="404网站">  </p>
-<p>不要慌，看到地址栏上的<code>zh-hans-cn</code>了吗，我们手动把它改回<code>en-us</code>就好了<br>正确的地址看起来是这样<code>https://www.playstation.com/en-us/ps5/ps5-beta-program-sign-up/#register</code><br>提交按钮在这个地方<br><img src="https://i.loli.net/2021/08/02/z3YqRWuslUfeS8V.png" alt="提交界面">  </p>
-<h2 id="4、等通知邮件"><a href="#4、等通知邮件" class="headerlink" title="4、等通知邮件"></a>4、等通知邮件</h2><p>提交注册以后，页面会变成这样<br><img src="https://i.loli.net/2021/08/02/GR3WnsIJyQeomBd.png" alt="提交完成">  </p>
-<p>如果通过的话，索尼将会给你发一封邮件通知，别忘了关注邮箱哈<br>截止发布这篇文章，菜狗也还没有收到回音，耐心等待吧</p>
+<p><img src="https://i.loli.net/2021/08/02/69yvHgFlezXYdGs.png" alt="修改文件内容"></p>
+<p>修改之后，可以直接保存关闭，压缩软件会重新打包jar文件</p>
+<p><img src="https://i.loli.net/2021/08/02/lFjWUbOKvzPg1eJ.png" alt="直接保存">  </p>
+<ul>
+<li>优点：从根源上解决问题，对此服务器下的所有网站都生效</li>
+<li>缺点：改动操作比较繁琐，毕竟要修改官方提供的jar包嘛，而且如果中间件有升级，还得再来一遍</li>
+</ul>
+<h2 id="二、Tomcat样例目录泄漏"><a href="#二、Tomcat样例目录泄漏" class="headerlink" title="二、Tomcat样例目录泄漏"></a>二、Tomcat样例目录泄漏</h2><p>直接删除<code>webapps</code>下的<code>examples</code>和<code>docs</code>等目录，菜狗进行操作之后，只留下了ROOT和应用目录，亲测不影响应用运行</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li>安全意识很重要，稳定为先，不管是开发还是运维，要时刻把安全放在第一位</li>
+<li>直接把应用端口暴露出来，虽然比直接暴露主机好，但也存在中间件方面的安全隐患。当你需要在公网暴露东西的时候，记得加上路径控制</li>
+<li>不要畏惧各种测试，尤其要多看专业的测试报告，在加固应用程序的同时，眼界和技能也在不知不觉中增加了</li>
+</ul>
 </section>
     <!-- Tags START -->
     
       <div class="tags">
         <span>Tags:</span>
         
-  <a href="/tags#趣玩" >
-    <span class="tag-code">趣玩</span>
+  <a href="/tags#运维" >
+    <span class="tag-code">运维</span>
   </a>
 
-  <a href="/tags#PS5" >
-    <span class="tag-code">PS5</span>
+  <a href="/tags#错题集" >
+    <span class="tag-code">错题集</span>
   </a>
 
       </div>
@@ -229,20 +275,13 @@
   <div class="nav-container">
     <!-- reverse left and right to put prev and next in a more logic postition -->
     
-      <a class="nav-left" href="/2021/07/29/%E7%A7%AF%E8%B7%AC%E6%AD%A5%EF%BC%8C%E8%87%B3%E5%8D%83%E9%87%8C/">
+      <a class="nav-left" href="/2021/08/02/%E5%9B%BD%E5%86%85%E5%A6%82%E4%BD%95%E6%B3%A8%E5%86%8CPS5%E7%B3%BB%E7%BB%9F%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95%E8%AE%A1%E5%88%92/">
         <span class="nav-arrow">← </span>
         
-          积跬步，至千里
+          国内如何注册PS5系统软件测试计划
         
       </a>
     
-    
-      <a class="nav-right" href="/2021/08/02/%E4%BD%A0%E7%9A%84Tomcat%E5%8F%AF%E8%83%BD%E5%B9%B6%E4%B8%8D%E5%AE%89%E5%85%A8%EF%BC%8C%E5%8E%9F%E5%9B%A0%E5%B1%85%E7%84%B6%E6%98%AF/">
-        
-          你的Tomcat可能并不安全，原因居然是
-        
-        <span class="nav-arrow"> →</span>
-      </a>
     
   </div>
 
@@ -294,7 +333,7 @@
   <div class="toc-main">
     <strong class="toc-title">Catalog</strong>
     
-      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#官方消息"><span class="toc-nav-text">官方消息</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#开始申请"><span class="toc-nav-text">开始申请</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1、打开注册网站"><span class="toc-nav-text">1、打开注册网站</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2、登录PSN账号"><span class="toc-nav-text">2、登录PSN账号</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3、翻到页面最底下，勾选提交"><span class="toc-nav-text">3、翻到页面最底下，勾选提交</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4、等通知邮件"><span class="toc-nav-text">4、等通知邮件</span></a></li></ol></li></ol>
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#背景"><span class="toc-nav-text">背景</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#测试结果"><span class="toc-nav-text">测试结果</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#测试详情"><span class="toc-nav-text">测试详情</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#修改过程"><span class="toc-nav-text">修改过程</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#一、中间件版本泄露"><span class="toc-nav-text">一、中间件版本泄露</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1-自定义404页面方案"><span class="toc-nav-text">1. 自定义404页面方案</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#2-修改Tomcat配置，隐藏版本信息"><span class="toc-nav-text">2. 修改Tomcat配置，隐藏版本信息</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#二、Tomcat样例目录泄漏"><span class="toc-nav-text">二、Tomcat样例目录泄漏</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#总结"><span class="toc-nav-text">总结</span></a></li></ol>
     
   </div>
 </aside>
@@ -304,7 +343,7 @@
 
 <script>
   (function () {
-    var url = 'http://yoursite.com/2021/08/02/国内如何注册PS5系统软件测试计划/';
+    var url = 'http://yoursite.com/2021/08/02/你的Tomcat可能并不安全，原因居然是/';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
