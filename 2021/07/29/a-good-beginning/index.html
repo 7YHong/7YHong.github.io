@@ -10,7 +10,7 @@
   
   <title>
     
-      你的Tomcat可能并不安全，原因居然是 | 菜狗学编程
+      积跬步，至千里 | 菜狗学编程
     
   </title>
   <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -180,8 +180,8 @@
 </header>
 
     <div id="article-banner">
-  <h2>你的Tomcat可能并不安全，原因居然是</h2>
-  <p class="post-date">2021-08-02</p>
+  <h2>积跬步，至千里</h2>
+  <p class="post-date">2021-07-29</p>
   <div class="arrow-down">
     <a href="javascript:;"></a>
   </div>
@@ -189,83 +189,33 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-    <section class="markdown-content"><h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>菜狗之前部署了一个Tomcat应用，渗透测试不通过，在此记录一下风险内容以及解决方案</p>
-<h1 id="测试结果"><a href="#测试结果" class="headerlink" title="测试结果"></a>测试结果</h1><table>
-<thead>
-<tr>
-<th align="center">风险说明</th>
-<th align="center">风险程度</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">中间件版本泄露</td>
-<td align="center">低</td>
-</tr>
-<tr>
-<td align="center">Tomcat样例目录泄漏</td>
-<td align="center">低</td>
-</tr>
-</tbody></table>
-<h1 id="测试详情"><a href="#测试详情" class="headerlink" title="测试详情"></a>测试详情</h1><table>
-<thead>
-<tr>
-<th align="center">风险名称</th>
-<th align="left">风险描述</th>
-<th align="left">修改建议</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">中间件版本泄露</td>
-<td align="left">404页面返回信息中包含中间件版本信息，攻击者会根据版本进行针对性攻击</td>
-<td align="left">去掉返回信息中中间件版本信息</td>
-</tr>
-<tr>
-<td align="center">Tomcat样例目录泄漏</td>
-<td align="left">Apache Tomcat默认安装包含<code>/examples</code>目录，且未做权限控制。其中session样例允许用户对session进行操纵</td>
-<td align="left">建议禁止访问或者讲默认WEB跟目录下的examples和docs目录及其下的所有文件都删除，以免造成不必要的信息泄露或其他漏洞</td>
-</tr>
-</tbody></table>
-<h1 id="修改过程"><a href="#修改过程" class="headerlink" title="修改过程"></a>修改过程</h1><h2 id="一、中间件版本泄露"><a href="#一、中间件版本泄露" class="headerlink" title="一、中间件版本泄露"></a>一、中间件版本泄露</h2><p>目前流行的有两种方案</p>
+    <section class="markdown-content"><h1 id="积跬步，至千里"><a href="#积跬步，至千里" class="headerlink" title="积跬步，至千里"></a>积跬步，至千里</h1><p>陆陆续续拖了好多年，终于下定决心，开始把个人博客给它写起来了</p>
+<p>个人喜欢研究折腾一些数码类、软件类的东西。多年以来，在这些方面，也小有心得。目前折腾过的东西也不少：</p>
 <ul>
-<li>自定义404页面</li>
-<li>修改Tomcat配置，隐藏版本信息<h3 id="1-自定义404页面方案"><a href="#1-自定义404页面方案" class="headerlink" title="1. 自定义404页面方案"></a>1. 自定义404页面方案</h3>tomcat /conf/web.xml 添加<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">web-app</span>&gt;</span></span><br><span class="line">	...</span><br><span class="line">	<span class="comment">&lt;!-- 400错误 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">error-page</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">error-code</span>&gt;</span>400<span class="tag">&lt;/<span class="name">error-code</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">location</span>&gt;</span>/error.jsp<span class="tag">&lt;/<span class="name">location</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">error-page</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!-- 404 页面不存在错误 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">error-page</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">error-code</span>&gt;</span>404<span class="tag">&lt;/<span class="name">error-code</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">location</span>&gt;</span>/error.jsp<span class="tag">&lt;/<span class="name">location</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">error-page</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!-- 500 服务器内部错误 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">error-page</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">error-code</span>&gt;</span>500<span class="tag">&lt;/<span class="name">error-code</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">location</span>&gt;</span>/error.jsp<span class="tag">&lt;/<span class="name">location</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">error-page</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">web-app</span>&gt;</span></span><br></pre></td></tr></table></figure>
-简而言之就是把内置的报错页面给替换了</li>
-<li>优点：改动小，容易实施</li>
-<li>缺点：自定义报错页面，容易引入其他bug，且没有涵盖所有的error-code，不具有普适性</li>
+<li>硬件类：黑白苹果，Windows寨板，ChromeBook，树莓派，组装NAS</li>
+<li>开发类：Restful接口，RPC，小程序，数据可视化系统</li>
+<li>平台类：阿里云，腾讯云，Google Cloud，Pages服务，图床</li>
+<li>瞎折腾类：收集各种下载工具、在线工具，刷机，系统封装等等</li>
 </ul>
-<h3 id="2-修改Tomcat配置，隐藏版本信息"><a href="#2-修改Tomcat配置，隐藏版本信息" class="headerlink" title="2. 修改Tomcat配置，隐藏版本信息"></a>2. 修改Tomcat配置，隐藏版本信息</h3><p>重打包 Tomcat lib 目录下的 catalina.jar 文件</p>
-<ol>
-<li>进入tomcat下的lib目录</li>
-<li>预览catalina.jar</li>
-<li>进入<code>\org\apache\catalina\util</code>目录下，修改<code>ServerInfo.properties</code>文件</li>
-<li>注释后3行</li>
-</ol>
-<p><img src="https://i.loli.net/2021/08/02/69yvHgFlezXYdGs.png" alt="修改文件内容"></p>
-<p>修改之后，可以直接保存关闭，压缩软件会重新打包jar文件</p>
-<p><img src="https://i.loli.net/2021/08/02/lFjWUbOKvzPg1eJ.png" alt="直接保存">  </p>
+<p>不能说是没有题材，反倒是玩过的东西太杂，导致能分享的东西很多，而又很杂乱，没有经过体系化的整理。很多时候突然灵光一闪，找到一个极好的题材了，图片拍好步骤截图好，却又改了又改，最后不了了之。失败了几次，再动笔时总会有意无意被上次的经历影响，而陷入一种死亡循环的状态，而后果显现的又太慢，就越来越没有动力去做这件事了</p>
+<p>最近经历了一些挫折，也开始反思错失的种种机会，思考人生以后未来的道路。目前虽然没有一个明确的目标，但是也根据自身存在的一些问题，总结了一些经验。在此记录如下：</p>
 <ul>
-<li>优点：从根源上解决问题，对此服务器下的所有网站都生效</li>
-<li>缺点：改动操作比较繁琐，毕竟要修改官方提供的jar包嘛，而且如果中间件有升级，还得再来一遍</li>
+<li>你很优秀，但是假如你不能想办法把优势展现出来，让别人看到，那么优势就被你浪费掉了。金子埋在土里不但不会发光，还有被挖掘机一铲碾碎的风险。只有抓住机会发光发热，才有可能成为价值连城的宝贝</li>
+<li>身在职场，做人比做事更重要。我见过很多人，自身能力很强，但是因为说话做事不够圆润，无端招惹了很多人而不自知。当别人说你有棱角的时候，多半是你已经给别人留下了坏印象，这时候就应该开始反省是不是给团队带来不好的影响了。团队就像一只木桶，能盛多少水，不是取决于最长的板，最短的板固然是一大因素，但最终决定因素，还是桶口有没有向上。团队兴则成员兴</li>
+<li>总结与汇报这项能力很重要！在这方面吃亏的人很多，在程序员群体中尤其明显，很多人付出了许多的心血与汗水，却总是吃不到胜利的果实。<del>你工作越努力，你的同事摸鱼就越爽，领导就能更快升职加薪。</del>领导很忙，不可能有时间去观察某个人具体做了什么，只有主动把工作成果亮出来，领导才知道你擅长啥，可以做到什么程度，这样等到有机会到来的时候，你才能成为那个人选</li>
+<li>学会分享。分享的目的在于合作共赢，请客吃饭不叫分享，分享在于与他人共享自己的感受、智慧、物质。分享不仅能创造与外界和谐的关系，更重要的是可以提升自己。如果说学习是输入，那么分享就是输出。在这个过程中，知识会经历 <strong>消化-吸收-总结提炼</strong> 的过程，无意识中就加深了对事物的理解与思考，可谓是百利无害</li>
 </ul>
-<h2 id="二、Tomcat样例目录泄漏"><a href="#二、Tomcat样例目录泄漏" class="headerlink" title="二、Tomcat样例目录泄漏"></a>二、Tomcat样例目录泄漏</h2><p>直接删除<code>webapps</code>下的<code>examples</code>和<code>docs</code>等目录，菜狗进行操作之后，只留下了ROOT和应用目录，亲测不影响应用运行</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
-<li>安全意识很重要，稳定为先，不管是开发还是运维，要时刻把安全放在第一位</li>
-<li>直接把应用端口暴露出来，虽然比直接暴露主机好，但也存在中间件方面的安全隐患。当你需要在公网暴露东西的时候，记得加上路径控制</li>
-<li>不要畏惧各种测试，尤其要多看专业的测试报告，在加固应用程序的同时，眼界和技能也在不知不觉中增加了</li>
-</ul>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="https://blog.csdn.net/ClearLoveQ/article/details/90209920" target="_blank" rel="noopener">Tomcat和Nginx版本信息泄露问题_ClearLoveQ的博客-CSDN博客_nginx版本信息泄露</a><br><a href="https://support.i-search.com.cn/article/1595412294560" target="_blank" rel="noopener">Tomcat 版本信息泄露漏洞 修复方案-艺赛旗社区 (i-search.com.cn)</a></p>
+<p>大领导曾说，“你们做信息的有一个弱势，就是要等到万事俱备了才行动，这样就很容易错失一些机会。先动起来，然后再慢慢修正”。</p>
+<p>感触很深，因此以后的文章也是这样，先想办法写出来，然后再慢慢的调整风格。Github Pages死慢，我就迁移到Gitee、Coding，Gitee在整改就整改，我先发布到公众号和Coding，回头有了再做同步。当需要仔细打磨的时候，完美主义就是我们的好朋友，当需要立即行动的时候，就不要等，先动起来，先积累，最后有空了再整合</p>
+<p><strong>不积跬步无以至千里。积跬步，而终至千里也</strong></p>
 </section>
     <!-- Tags START -->
     
       <div class="tags">
         <span>Tags:</span>
         
-  <a href="/tags#运维" >
-    <span class="tag-code">运维</span>
-  </a>
-
-  <a href="/tags#错题集" >
-    <span class="tag-code">错题集</span>
+  <a href="/tags#感悟" >
+    <span class="tag-code">感悟</span>
   </a>
 
       </div>
@@ -276,13 +226,13 @@
   <div class="nav-container">
     <!-- reverse left and right to put prev and next in a more logic postition -->
     
-      <a class="nav-left" href="/2021/08/02/%E5%9B%BD%E5%86%85%E5%A6%82%E4%BD%95%E6%B3%A8%E5%86%8CPS5%E7%B3%BB%E7%BB%9F%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95%E8%AE%A1%E5%88%92/">
-        <span class="nav-arrow">← </span>
+    
+      <a class="nav-right" href="/2021/08/02/sign-up-ps5-beta-program-in-china/">
         
           国内如何注册PS5系统软件测试计划
         
+        <span class="nav-arrow"> →</span>
       </a>
-    
     
   </div>
 
@@ -334,7 +284,7 @@
   <div class="toc-main">
     <strong class="toc-title">Catalog</strong>
     
-      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#背景"><span class="toc-nav-text">背景</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#测试结果"><span class="toc-nav-text">测试结果</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#测试详情"><span class="toc-nav-text">测试详情</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#修改过程"><span class="toc-nav-text">修改过程</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#一、中间件版本泄露"><span class="toc-nav-text">一、中间件版本泄露</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1-自定义404页面方案"><span class="toc-nav-text">1. 自定义404页面方案</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#2-修改Tomcat配置，隐藏版本信息"><span class="toc-nav-text">2. 修改Tomcat配置，隐藏版本信息</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#二、Tomcat样例目录泄漏"><span class="toc-nav-text">二、Tomcat样例目录泄漏</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#总结"><span class="toc-nav-text">总结</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#参考资料"><span class="toc-nav-text">参考资料</span></a></li></ol>
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#积跬步，至千里"><span class="toc-nav-text">积跬步，至千里</span></a></li></ol>
     
   </div>
 </aside>
@@ -344,7 +294,7 @@
 
 <script>
   (function () {
-    var url = 'http://yoursite.com/2021/08/02/你的Tomcat可能并不安全，原因居然是/';
+    var url = 'http://yoursite.com/2021/07/29/a-good-beginning/';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
