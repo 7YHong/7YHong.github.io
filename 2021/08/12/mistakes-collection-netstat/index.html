@@ -10,7 +10,7 @@
   
   <title>
     
-      你的Tomcat可能并不安全，原因居然是 | 菜狗学编程
+      netstat命令报错解决方案 | 菜狗学编程
     
   </title>
   <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -180,8 +180,8 @@
 </header>
 
     <div id="article-banner">
-  <h2>你的Tomcat可能并不安全，原因居然是</h2>
-  <p class="post-date">2021-08-02</p>
+  <h2>netstat命令报错解决方案</h2>
+  <p class="post-date">2021-08-12</p>
   <div class="arrow-down">
     <a href="javascript:;"></a>
   </div>
@@ -189,71 +189,29 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-    <section class="markdown-content"><h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>菜狗之前部署了一个Tomcat应用，渗透测试不通过，在此记录一下风险内容以及解决方案</p>
-<h1 id="测试结果"><a href="#测试结果" class="headerlink" title="测试结果"></a>测试结果</h1><table>
-<thead>
-<tr>
-<th align="center">风险说明</th>
-<th align="center">风险程度</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">中间件版本泄露</td>
-<td align="center">低</td>
-</tr>
-<tr>
-<td align="center">Tomcat样例目录泄漏</td>
-<td align="center">低</td>
-</tr>
-</tbody></table>
-<h1 id="测试详情"><a href="#测试详情" class="headerlink" title="测试详情"></a>测试详情</h1><table>
-<thead>
-<tr>
-<th align="center">风险名称</th>
-<th align="left">风险描述</th>
-<th align="left">修改建议</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">中间件版本泄露</td>
-<td align="left">404页面返回信息中包含中间件版本信息，攻击者会根据版本进行针对性攻击</td>
-<td align="left">去掉返回信息中中间件版本信息</td>
-</tr>
-<tr>
-<td align="center">Tomcat样例目录泄漏</td>
-<td align="left">Apache Tomcat默认安装包含<code>/examples</code>目录，且未做权限控制。其中session样例允许用户对session进行操纵</td>
-<td align="left">建议禁止访问或者讲默认WEB跟目录下的examples和docs目录及其下的所有文件都删除，以免造成不必要的信息泄露或其他漏洞</td>
-</tr>
-</tbody></table>
-<h1 id="修改过程"><a href="#修改过程" class="headerlink" title="修改过程"></a>修改过程</h1><h2 id="一、中间件版本泄露"><a href="#一、中间件版本泄露" class="headerlink" title="一、中间件版本泄露"></a>一、中间件版本泄露</h2><p>目前流行的有两种方案</p>
+    <section class="markdown-content"><h1 id="netstat命令报错解决方案"><a href="#netstat命令报错解决方案" class="headerlink" title="netstat命令报错解决方案"></a>netstat命令报错解决方案</h1><h2 id="Debian环境下安装报错"><a href="#Debian环境下安装报错" class="headerlink" title="Debian环境下安装报错"></a>Debian环境下安装报错</h2><ul>
+<li>执行的命令<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/<span class="comment"># netstat</span></span><br></pre></td></tr></table></figure></li>
+<li>报错内容<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash: netstat: command not found</span><br></pre></td></tr></table></figure></li>
+<li>错误原因</li>
+</ul>
+<p>没有安装<code>netstat</code>命令</p>
 <ul>
-<li>自定义404页面</li>
-<li>修改Tomcat配置，隐藏版本信息<h3 id="1-自定义404页面方案"><a href="#1-自定义404页面方案" class="headerlink" title="1. 自定义404页面方案"></a>1. 自定义404页面方案</h3>tomcat /conf/web.xml 添加<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">web-app</span>&gt;</span></span><br><span class="line">	...</span><br><span class="line">	<span class="comment">&lt;!-- 400错误 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">error-page</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">error-code</span>&gt;</span>400<span class="tag">&lt;/<span class="name">error-code</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">location</span>&gt;</span>/error.jsp<span class="tag">&lt;/<span class="name">location</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">error-page</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!-- 404 页面不存在错误 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">error-page</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">error-code</span>&gt;</span>404<span class="tag">&lt;/<span class="name">error-code</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">location</span>&gt;</span>/error.jsp<span class="tag">&lt;/<span class="name">location</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">error-page</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!-- 500 服务器内部错误 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">error-page</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">error-code</span>&gt;</span>500<span class="tag">&lt;/<span class="name">error-code</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">location</span>&gt;</span>/error.jsp<span class="tag">&lt;/<span class="name">location</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">error-page</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">web-app</span>&gt;</span></span><br></pre></td></tr></table></figure>
-简而言之就是把内置的报错页面给替换了</li>
-<li>优点：改动小，容易实施</li>
-<li>缺点：自定义报错页面，容易引入其他bug，且没有涵盖所有的error-code，不具有普适性</li>
+<li>继续执行<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/<span class="comment"># apt-get install -y netstat</span></span><br></pre></td></tr></table></figure></li>
+<li>报错内容<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Reading package lists... Done</span><br><span class="line">Building dependency tree... Done</span><br><span class="line">Reading state information... Done</span><br><span class="line">E: Unable to locate package netstat</span><br></pre></td></tr></table></figure></li>
+<li>错误原因</li>
 </ul>
-<h3 id="2-修改Tomcat配置，隐藏版本信息"><a href="#2-修改Tomcat配置，隐藏版本信息" class="headerlink" title="2. 修改Tomcat配置，隐藏版本信息"></a>2. 修改Tomcat配置，隐藏版本信息</h3><p>重打包 Tomcat lib 目录下的 catalina.jar 文件</p>
-<ol>
-<li>进入tomcat下的lib目录</li>
-<li>预览catalina.jar</li>
-<li>进入<code>\org\apache\catalina\util</code>目录下，修改<code>ServerInfo.properties</code>文件</li>
-<li>注释后3行</li>
-</ol>
-<p><img src="https://i.loli.net/2021/08/02/69yvHgFlezXYdGs.png" alt="修改文件内容"></p>
-<p>修改之后，可以直接保存关闭，压缩软件会重新打包jar文件</p>
-<p><img src="https://i.loli.net/2021/08/02/lFjWUbOKvzPg1eJ.png" alt="直接保存">  </p>
+<p><code>apt-get</code>上面是没有<code>netstat</code>这个包的，<code>netstat</code>这个工具在<code>net-tools</code>里</p>
 <ul>
-<li>优点：从根源上解决问题，对此服务器下的所有网站都生效</li>
-<li>缺点：改动操作比较繁琐，毕竟要修改官方提供的jar包嘛，而且如果中间件有升级，还得再来一遍</li>
+<li>错误解决<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/<span class="comment"># apt-get install -y net-tools</span></span><br></pre></td></tr></table></figure></li>
+<li>扩展<br>除了<code>netstat</code>，<code>net-tools</code>里面还有些啥？<blockquote>
+<p>net-tools工具箱包括arp, hostname, ifconfig, netstat, rarp, route, plipconfig, slattach, mii-tool and iptunnel and ipmaddr等命令</p>
+</blockquote>
+</li>
 </ul>
-<h2 id="二、Tomcat样例目录泄漏"><a href="#二、Tomcat样例目录泄漏" class="headerlink" title="二、Tomcat样例目录泄漏"></a>二、Tomcat样例目录泄漏</h2><p>直接删除<code>webapps</code>下的<code>examples</code>和<code>docs</code>等目录，菜狗进行操作之后，只留下了ROOT和应用目录，亲测不影响应用运行</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
-<li>安全意识很重要，稳定为先，不管是开发还是运维，要时刻把安全放在第一位</li>
-<li>直接把应用端口暴露出来，虽然比直接暴露主机好，但也存在中间件方面的安全隐患。当你需要在公网暴露东西的时候，记得加上路径控制</li>
-<li>不要畏惧各种测试，尤其要多看专业的测试报告，在加固应用程序的同时，眼界和技能也在不知不觉中增加了</li>
+<p>举一反三：当找不到以上命令的时候，别再傻傻的install工具名了，安装<code>net-tools</code>准没错</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://messay.me/2017/10/15/Debian-Ubuntu%E6%97%A0netstat%E5%91%BD%E4%BB%A4%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" target="_blank" rel="noopener">Debian/Ubuntu无netstat命令解决方案</a></li>
 </ul>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="https://blog.csdn.net/ClearLoveQ/article/details/90209920" target="_blank" rel="noopener">Tomcat和Nginx版本信息泄露问题_ClearLoveQ的博客-CSDN博客_nginx版本信息泄露</a><br><a href="https://support.i-search.com.cn/article/1595412294560" target="_blank" rel="noopener">Tomcat 版本信息泄露漏洞 修复方案-艺赛旗社区 (i-search.com.cn)</a></p>
 </section>
     <!-- Tags START -->
     
@@ -268,6 +226,10 @@
     <span class="tag-code">错题集</span>
   </a>
 
+  <a href="/tags#Linux" >
+    <span class="tag-code">Linux</span>
+  </a>
+
       </div>
     
     <!-- Tags END -->
@@ -276,20 +238,13 @@
   <div class="nav-container">
     <!-- reverse left and right to put prev and next in a more logic postition -->
     
-      <a class="nav-left" href="/2021/08/02/sign-up-ps5-beta-program-in-china/">
+      <a class="nav-left" href="/2021/08/12/linux-command-netstat/">
         <span class="nav-arrow">← </span>
-        
-          国内如何注册PS5系统软件测试计划
-        
-      </a>
-    
-    
-      <a class="nav-right" href="/2021/08/12/linux-command-netstat/">
         
           netstat命令详解
         
-        <span class="nav-arrow"> →</span>
       </a>
+    
     
   </div>
 
@@ -341,7 +296,7 @@
   <div class="toc-main">
     <strong class="toc-title">Catalog</strong>
     
-      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#背景"><span class="toc-nav-text">背景</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#测试结果"><span class="toc-nav-text">测试结果</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#测试详情"><span class="toc-nav-text">测试详情</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#修改过程"><span class="toc-nav-text">修改过程</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#一、中间件版本泄露"><span class="toc-nav-text">一、中间件版本泄露</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1-自定义404页面方案"><span class="toc-nav-text">1. 自定义404页面方案</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#2-修改Tomcat配置，隐藏版本信息"><span class="toc-nav-text">2. 修改Tomcat配置，隐藏版本信息</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#二、Tomcat样例目录泄漏"><span class="toc-nav-text">二、Tomcat样例目录泄漏</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#总结"><span class="toc-nav-text">总结</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#参考资料"><span class="toc-nav-text">参考资料</span></a></li></ol>
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#netstat命令报错解决方案"><span class="toc-nav-text">netstat命令报错解决方案</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Debian环境下安装报错"><span class="toc-nav-text">Debian环境下安装报错</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#参考资料"><span class="toc-nav-text">参考资料</span></a></li></ol></li></ol>
     
   </div>
 </aside>
@@ -351,7 +306,7 @@
 
 <script>
   (function () {
-    var url = 'http://yoursite.com/2021/08/02/fix-vulnerabilities-in-apache-tomcat/';
+    var url = 'http://yoursite.com/2021/08/12/mistakes-collection-netstat/';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({

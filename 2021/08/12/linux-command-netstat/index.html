@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="7YHong&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      netstat命令详解 | 菜狗学编程
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+<!-- <div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div> -->
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>菜狗学编程</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>netstat命令详解</h2>
+  <p class="post-date">2021-08-12</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h1 id="netstat命令详解"><a href="#netstat命令详解" class="headerlink" title="netstat命令详解"></a>netstat命令详解</h1><h2 id="0x01-功能说明"><a href="#0x01-功能说明" class="headerlink" title="0x01 功能说明"></a>0x01 功能说明</h2><p>netstat命令用来显示本机网络连接、运行端口和中由表等信息</p>
+<h2 id="0x02-实验环境"><a href="#0x02-实验环境" class="headerlink" title="0x02 实验环境"></a>0x02 实验环境</h2><p><code>Debian:bullseye-slim</code></p>
+<h2 id="0x03-命令的安装"><a href="#0x03-命令的安装" class="headerlink" title="0x03 命令的安装"></a>0x03 命令的安装</h2><p><code>apt-get install net-tools</code></p>
+<h2 id="0x04-命令文档"><a href="#0x04-命令文档" class="headerlink" title="0x04 命令文档"></a>0x04 命令文档</h2><ul>
+<li>命令帮助<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">usage: netstat [-vWeenNcCF] [&lt;Af&gt;] -r         netstat &#123;-V|--version|-h|--help&#125;</span><br><span class="line">       netstat [-vWnNcaeol] [&lt;Socket&gt; ...]</span><br><span class="line">       netstat &#123; [-vWeenNac] -i | [-cnNe] -M | -s [-6tuw] &#125;</span><br><span class="line"></span><br><span class="line">        -r, --route              display routing table</span><br><span class="line">        -i, --interfaces         display interface table</span><br><span class="line">        -g, --groups             display multicast group memberships</span><br><span class="line">        -s, --statistics         display networking statistics (like SNMP)</span><br><span class="line">        -M, --masquerade         display masqueraded connections</span><br><span class="line"></span><br><span class="line">        -v, --verbose            be verbose</span><br><span class="line">        -W, --wide               don&#39;t truncate IP addresses</span><br><span class="line">        -n, --numeric            don&#39;t resolve names</span><br><span class="line">        --numeric-hosts          don&#39;t resolve host names</span><br><span class="line">        --numeric-ports          don&#39;t resolve port names</span><br><span class="line">        --numeric-users          don&#39;t resolve user names</span><br><span class="line">        -N, --symbolic           resolve hardware names</span><br><span class="line">        -e, --extend             display other&#x2F;more information</span><br><span class="line">        -p, --programs           display PID&#x2F;Program name for sockets</span><br><span class="line">        -o, --timers             display timers</span><br><span class="line">        -c, --continuous         continuous listing</span><br><span class="line"></span><br><span class="line">        -l, --listening          display listening server sockets</span><br><span class="line">        -a, --all                display all sockets (default: connected)</span><br><span class="line">        -F, --fib                display Forwarding Information Base (default)</span><br><span class="line">        -C, --cache              display routing cache instead of FIB</span><br><span class="line">        -Z, --context            display SELinux security context for sockets</span><br><span class="line"></span><br><span class="line">  &lt;Socket&gt;&#x3D;&#123;-t|--tcp&#125; &#123;-u|--udp&#125; &#123;-U|--udplite&#125; &#123;-S|--sctp&#125; &#123;-w|--raw&#125;</span><br><span class="line">           &#123;-x|--unix&#125; --ax25 --ipx --netrom</span><br><span class="line">  &lt;AF&gt;&#x3D;Use &#39;-6|-4&#39; or &#39;-A &lt;af&gt;&#39; or &#39;--&lt;af&gt;&#39;; default: inet</span><br><span class="line">  List of possible address families (which support routing):</span><br><span class="line">    inet (DARPA Internet) inet6 (IPv6) ax25 (AMPR AX.25) </span><br><span class="line">    netrom (AMPR NET&#x2F;ROM) ipx (Novell IPX) ddp (Appletalk DDP) </span><br><span class="line">    x25 (CCITT X.25)</span><br></pre></td></tr></table></figure></li>
+<li>常用参数</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-a, –all</td>
+<td>显示本机所有连接和监听端口（若不加就不会展示LISTEN状态的连接）</td>
+</tr>
+<tr>
+<td>-n, –numeric</td>
+<td>以网络IP地址的形式显示当前建立的有效连接和端口</td>
+</tr>
+<tr>
+<td>-t, –tcp</td>
+<td>显示所有的TCP协议连接情况</td>
+</tr>
+<tr>
+<td>-u, –udp</td>
+<td>显示所有的UDP协议连接情况</td>
+</tr>
+<tr>
+<td>-l</td>
+<td>仅显示连接状态为“LISTEN”的服务折网络状态</td>
+</tr>
+<tr>
+<td>-4</td>
+<td>仅显示IPv4连接</td>
+</tr>
+<tr>
+<td>-6</td>
+<td>仅显示IPv6连接</td>
+</tr>
+<tr>
+<td>-s</td>
+<td>显示按协议的统计信息。默认情况下，将显示IP、IPV6、ICMP、ICMPv6、TCP、TCPv6、UDP和UDPv6的统计信息</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>显示当前的有效连接，与“-n”选项类似</td>
+</tr>
+<tr>
+<td>-p</td>
+<td>显示连接对应的PID与程序名</td>
+</tr>
+</tbody></table>
+<h2 id="0x05-使用示例"><a href="#0x05-使用示例" class="headerlink" title="0x05 使用示例"></a>0x05 使用示例</h2><ul>
+<li>列出所有TCP端口<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -at</span><br></pre></td></tr></table></figure>
+结果（有删减）<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Active Internet connections (servers and established)</span><br><span class="line">Proto Recv-Q Send-Q Local Address           Foreign Address         State      </span><br><span class="line">tcp        0      0 NAS4XUN:16509           0.0.0.0:*               LISTEN     </span><br><span class="line">tcp        0      0 0.0.0.0:microsoft-ds    0.0.0.0:*               LISTEN     </span><br><span class="line">tcp        0      0 NAS4XUN:35743           0.0.0.0:*               LISTEN     </span><br><span class="line">tcp        0      0 NAS4XUN:44947           NAS4XUN:54194           ESTABLISHED</span><br></pre></td></tr></table></figure></li>
+<li>以IP地址显示<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -nat</span><br></pre></td></tr></table></figure>
+结果（有删减）<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Active Internet connections (servers and established)</span><br><span class="line">Proto Recv-Q Send-Q Local Address           Foreign Address         State      </span><br><span class="line">tcp        0      0 0.0.0.0:445             0.0.0.0:*               LISTEN     </span><br><span class="line">tcp        0      0 127.0.0.1:35743         0.0.0.0:*               LISTEN     </span><br><span class="line">tcp        0      0 127.0.0.1:44947         127.0.0.1:54194         ESTABLISHED</span><br><span class="line">tcp        0      0 127.0.0.1:52506         127.0.0.1:44141         TIME_WAIT  </span><br><span class="line">tcp        0      0 192.168.7.100:53296     139.162.75.196:443      ESTABLISHED</span><br><span class="line">tcp        0      0 192.168.7.100:58890     72.14.179.64:443        ESTABLISHED</span><br></pre></td></tr></table></figure></li>
+<li>只展示IPv4的tcp连接<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -nat4</span><br></pre></td></tr></table></figure>
+结果（有删减）<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Active Internet connections (servers and established)</span><br><span class="line">Proto Recv-Q Send-Q Local Address           Foreign Address         State      </span><br><span class="line">tcp        0      0 0.0.0.0:445             0.0.0.0:*               LISTEN     </span><br><span class="line">tcp        0      0 127.0.0.1:35743         0.0.0.0:*               LISTEN     </span><br><span class="line">tcp        0      0 127.0.0.1:60126         127.0.0.1:37539         ESTABLISHED</span><br><span class="line">tcp        1      0 192.168.7.100:35716     99.81.164.127:80        CLOSE_WAIT </span><br><span class="line">tcp        1      0 192.168.7.100:49066     99.81.153.144:443       CLOSE_WAIT </span><br><span class="line">tcp        0      0 127.0.0.1:39904         127.0.0.1:40061         TIME_WAIT  </span><br><span class="line">tcp        0      0 127.0.0.1:54506         127.0.0.1:41555         TIME_WAIT  </span><br><span class="line">tcp        0      0 127.0.0.1:46651         127.0.0.1:49900         ESTABLISHED</span><br><span class="line">tcp        0      0 127.0.0.1:35603         127.0.0.1:32814         ESTABLISHED</span><br></pre></td></tr></table></figure>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2></li>
+<li><a href="https://www.huaweicloud.com/articles/38afd8df4ec83eaac6474d01d3e7feee.html" target="_blank" rel="noopener">Linux命令（33）：netstat命令-显示网络端口信息</a></li>
+<li><a href="https://www.cnblogs.com/augusite/p/11151751.html" target="_blank" rel="noopener">Linux 监控tcp连接数及状态</a></li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#运维" >
+    <span class="tag-code">运维</span>
+  </a>
+
+  <a href="/tags#Linux" >
+    <span class="tag-code">Linux</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2021/08/02/fix-vulnerabilities-in-apache-tomcat/">
+        <span class="nav-arrow">← </span>
+        
+          你的Tomcat可能并不安全，原因居然是
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2021/08/12/mistakes-collection-netstat/">
+        
+          netstat命令报错解决方案
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo="7YHong/7YHong.github.io"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#netstat命令详解"><span class="toc-nav-text">netstat命令详解</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#0x01-功能说明"><span class="toc-nav-text">0x01 功能说明</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#0x02-实验环境"><span class="toc-nav-text">0x02 实验环境</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#0x03-命令的安装"><span class="toc-nav-text">0x03 命令的安装</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#0x04-命令文档"><span class="toc-nav-text">0x04 命令文档</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#0x05-使用示例"><span class="toc-nav-text">0x05 使用示例</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#参考资料"><span class="toc-nav-text">参考资料</span></a></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://yoursite.com/2021/08/12/linux-command-netstat/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng" target="_blank" rel="noopener">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>
