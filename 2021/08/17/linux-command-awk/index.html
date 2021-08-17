@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="7YHong&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      awk命令详解 | 菜狗学编程
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+<!-- <div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div> -->
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <!-- <div class="logo"></div> -->
+      <span>菜狗学编程</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>awk命令详解</h2>
+  <p class="post-date">2021-08-17</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h1 id="awk命令详解"><a href="#awk命令详解" class="headerlink" title="awk命令详解"></a>awk命令详解</h1><h2 id="0x01-功能说明"><a href="#0x01-功能说明" class="headerlink" title="0x01 功能说明"></a>0x01 功能说明</h2><p><code>awk</code>是处理文本文件的一个应用程序，几乎所有 Linux 系统都自带这个程序</p>
+<p>它依次处理文件的每一行，并读取里面的每一个字段。对于日志、CSV 那样的每行格式相同的文本文件，awk可能是最方便的工具</p>
+<p><code>awk</code>其实不仅仅是工具软件，还是一种编程语言</p>
+<h2 id="0x02-实验环境"><a href="#0x02-实验环境" class="headerlink" title="0x02 实验环境"></a>0x02 实验环境</h2><p><code>Debian:bullseye-slim</code></p>
+<h2 id="0x03-命令的安装"><a href="#0x03-命令的安装" class="headerlink" title="0x03 命令的安装"></a>0x03 命令的安装</h2><p><code>apt-get install gawk</code></p>
+<p>几乎所有的系统都内置了这个命令，按需执行即可</p>
+<h2 id="0x04-命令文档"><a href="#0x04-命令文档" class="headerlink" title="0x04 命令文档"></a>0x04 命令文档</h2><h3 id="命令帮助"><a href="#命令帮助" class="headerlink" title="命令帮助"></a>命令帮助</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">Usage: mawk [Options] [Program] [file ...]</span><br><span class="line"></span><br><span class="line">Program:</span><br><span class="line">    The -f option value is the name of a file containing program text.</span><br><span class="line">    If no -f option is given, a &quot;--&quot; ends option processing; the following</span><br><span class="line">    parameters are the program text.</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line">    -f program-file  Program  text is read from file instead of from the</span><br><span class="line">                     command-line.  Multiple -f options are accepted.</span><br><span class="line">    -F value         sets the field separator, FS, to value.</span><br><span class="line">    -v var&#x3D;value     assigns value to program variable var.</span><br><span class="line">    --               unambiguous end of options.</span><br><span class="line"></span><br><span class="line">    Implementation-specific options are prefixed with &quot;-W&quot;.  They can be</span><br><span class="line">    abbreviated:</span><br><span class="line"></span><br><span class="line">    -W version       show version information and exit.</span><br><span class="line">    -W dump          show assembler-like listing of program and exit.</span><br><span class="line">    -W help          show this message and exit.</span><br><span class="line">    -W interactive   set unbuffered output, line-buffered input.</span><br><span class="line">    -W exec file     use file as program as well as last option.</span><br><span class="line">    -W random&#x3D;number set initial random seed.</span><br><span class="line">    -W sprintf&#x3D;number adjust size of sprintf buffer.</span><br><span class="line">    -W posix_space   do not consider &quot;\n&quot; a space.</span><br><span class="line">    -W usage         show this message and exit.</span><br></pre></td></tr></table></figure>
+<h3 id="常用参数"><a href="#常用参数" class="headerlink" title="常用参数"></a>常用参数</h3><p>awk命令的主要用法还是写程序实现功能，常用参数并不多</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-F</td>
+<td>指定分隔符</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>指定程序文件</td>
+</tr>
+</tbody></table>
+<h3 id="print和printf"><a href="#print和printf" class="headerlink" title="print和printf"></a>print和printf</h3><p>awk中同时提供了print和printf两种打印输出的函数</p>
+<p>其中print函数的参数可以是变量、数值或者字符串。字符串必须用双引号引用，参数用逗号分隔。如果没有逗号，参数就串联在一起而无法区分。这里，逗号的作用与输出文件的分隔符的作用是一样的，只是后者是空格而已</p>
+<p>printf函数，其用法和c语言中printf基本相似,可以格式化字符串,输出复杂时，printf更加好用，代码更易懂</p>
+<h3 id="常用变量"><a href="#常用变量" class="headerlink" title="常用变量"></a>常用变量</h3><table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$+数字N</td>
+<td>表示第N个字段</td>
+</tr>
+<tr>
+<td>NF</td>
+<td>表示当前行字段总数</td>
+</tr>
+<tr>
+<td>NR</td>
+<td>表示当前正在处理的行数</td>
+</tr>
+<tr>
+<td>FILENAME</td>
+<td>当前文件名</td>
+</tr>
+<tr>
+<td>FS</td>
+<td>字段分隔符，默认是空格和制表符。</td>
+</tr>
+<tr>
+<td>RS</td>
+<td>行分隔符，用于分割每一行，默认是换行符。</td>
+</tr>
+<tr>
+<td>OFS</td>
+<td>输出字段的分隔符，用于打印时分隔字段，默认为空格。</td>
+</tr>
+<tr>
+<td>ORS</td>
+<td>输出记录的分隔符，用于打印时分隔记录，默认为换行符。</td>
+</tr>
+<tr>
+<td>OFMT</td>
+<td>数字输出的格式，默认为％.6g。</td>
+</tr>
+</tbody></table>
+<h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>tolower()</td>
+<td>字符转为小写</td>
+</tr>
+<tr>
+<td>length()</td>
+<td>返回字符串长度</td>
+</tr>
+<tr>
+<td>substr()</td>
+<td>返回子字符串</td>
+</tr>
+<tr>
+<td>sin()</td>
+<td>正弦</td>
+</tr>
+<tr>
+<td>cos()</td>
+<td>余弦</td>
+</tr>
+<tr>
+<td>sqrt()</td>
+<td>平方根</td>
+</tr>
+<tr>
+<td>rand()</td>
+<td>随机数</td>
+</tr>
+</tbody></table>
+<h2 id="0x05-awk编程"><a href="#0x05-awk编程" class="headerlink" title="0x05 awk编程"></a>0x05 awk编程</h2><p>代码块应写在<code>{}</code>内，多个代码块可以用<code>{} END {}</code>格式来写。每个语句之间用<code>;</code>分隔，只有一个语句时，可以不写<code>;</code></p>
+<h3 id="变量和赋值"><a href="#变量和赋值" class="headerlink" title="变量和赋值"></a>变量和赋值</h3><h4 id="内置变量"><a href="#内置变量" class="headerlink" title="内置变量"></a>内置变量</h4><p>输出/etc/passwd的账户名</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ awk -F: <span class="string">'&#123; print $1 &#125;'</span> /etc/passwd</span><br><span class="line">root</span><br><span class="line">daemon</span><br><span class="line">bin</span><br><span class="line">sys</span><br><span class="line">sync</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>$1表示第一个字段，在前面加上print表示打印到控制台</p>
+</blockquote>
+<h4 id="自定义变量"><a href="#自定义变量" class="headerlink" title="自定义变量"></a>自定义变量</h4><p>统计/etc/passwd的账户人数</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ awk -F: <span class="string">'&#123; count++ &#125; END &#123; print "user count is ", count &#125;'</span> /etc/passwd</span><br><span class="line">user count is  5</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>自定义变量不需要提前声明</p>
+</blockquote>
+<h3 id="条件"><a href="#条件" class="headerlink" title="条件"></a>条件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ awk -F: <span class="string">'/usr/ &#123;print $1&#125;'</span> /etc/passwd</span><br><span class="line">root</span><br><span class="line">daemon</span><br><span class="line">bin</span><br><span class="line">sys</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>print命令前面是一个正则表达式，只输出包含usr的行</p>
+</blockquote>
+<h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><p><code>array_name[key] = value</code></p>
+<p>awk支持<code>K-V 键值对</code>的数据结构，存储在内部的一张针对key/value应用hash的表格里</p>
+<p>key可以是数字或字符串</p>
+<p>和变量一样，都是在使用时自动创建的，awk也同样会自动判断其存储的是数字还是字符串</p>
+<p>一般而言，awk中的数组用来从记录中收集信息，可以用于计算总和、统计单词以及跟踪模板被匹配的次数等等。</p>
+<p>举例：统计每个用户组下有多少名用户</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ awk -F: <span class="string">'&#123; ++S[$4] &#125; END &#123; for (a in S) print a,S[a] &#125;'</span> /etc/passwd</span><br></pre></td></tr></table></figure>
+
+<h3 id="if语句"><a href="#if语句" class="headerlink" title="if语句"></a>if语句</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ awk -F: <span class="string">'&#123;if ($1 &gt; "m") print $1; else print "---"&#125;'</span> demo.txt</span><br><span class="line">root</span><br><span class="line">---</span><br><span class="line">---</span><br><span class="line">sys</span><br><span class="line">sync</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>上面代码输出第一个字段的第一个字符大于m的行，可以手动指定else输出“—”</p>
+</blockquote>
+<h3 id="循环语句"><a href="#循环语句" class="headerlink" title="循环语句"></a>循环语句</h3><p>awk中的循环语句同样借鉴于C语言，支持while、do/while、for、break、continue，这些关键字的语义和C语言中的语义完全相同</p>
+<p>如果只是希望遍历文件的每一行，则完全不需要靠循环语句实现，例如<a href="#自定义变量">自定义变量</a>一节</p>
+<p>若要遍历再循环，则将代码写在<code>{}</code>里面，然后用<code>END</code>分隔，例如<a href="#数组">数组</a>一节</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://www.ruanyifeng.com/blog/2018/11/awk.html" target="_blank" rel="noopener">awk入门教程</a></li>
+<li><a href="https://www.cnblogs.com/ggjucheng/archive/2013/01/13/2858470.html" target="_blank" rel="noopener">linux awk命令详解</a></li>
+<li><a href="https://www.twle.cn/c/yufei/awk/awk-basic-arrays.html" target="_blank" rel="noopener">AWK 数组</a></li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#运维" >
+    <span class="tag-code">运维</span>
+  </a>
+
+  <a href="/tags#Linux" >
+    <span class="tag-code">Linux</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2021/08/12/mistakes-collection-netstat/">
+        <span class="nav-arrow">← </span>
+        
+          netstat命令报错解决方案
+        
+      </a>
+    
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo="7YHong/7YHong.github.io"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#awk命令详解"><span class="toc-nav-text">awk命令详解</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#0x01-功能说明"><span class="toc-nav-text">0x01 功能说明</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#0x02-实验环境"><span class="toc-nav-text">0x02 实验环境</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#0x03-命令的安装"><span class="toc-nav-text">0x03 命令的安装</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#0x04-命令文档"><span class="toc-nav-text">0x04 命令文档</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#命令帮助"><span class="toc-nav-text">命令帮助</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#常用参数"><span class="toc-nav-text">常用参数</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#print和printf"><span class="toc-nav-text">print和printf</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#常用变量"><span class="toc-nav-text">常用变量</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#函数"><span class="toc-nav-text">函数</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#0x05-awk编程"><span class="toc-nav-text">0x05 awk编程</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#变量和赋值"><span class="toc-nav-text">变量和赋值</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#内置变量"><span class="toc-nav-text">内置变量</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#自定义变量"><span class="toc-nav-text">自定义变量</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#条件"><span class="toc-nav-text">条件</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#数组"><span class="toc-nav-text">数组</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#if语句"><span class="toc-nav-text">if语句</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#循环语句"><span class="toc-nav-text">循环语句</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#参考资料"><span class="toc-nav-text">参考资料</span></a></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://yoursite.com/2021/08/17/linux-command-awk/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a href="https://github.com/yanm1ng" target="_blank" rel="noopener">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>
