@@ -3,14 +3,14 @@
   <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
-  <meta name="description" content="7YHong&#39;s blog">
+  <meta name="description" content="和你分享有用和有趣的知识">
   <meta name="keyword" content="hexo-theme, vuejs">
   
     <link rel="shortcut icon" href="/css/images/logo.png">
   
   <title>
     
-      你的Tomcat可能并不安全，原因居然是 | 菜狗学编程
+      你的Tomcat可能并不安全，原因居然是 | 小迅的神奇海螺
     
   </title>
   <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -70,7 +70,7 @@
   <div class="header-container">
     <a class="home-link" href="/">
       <!-- <div class="logo"></div> -->
-      <span>菜狗学编程</span>
+      <span>小迅的神奇海螺</span>
     </a>
     <ul class="right-list">
       
@@ -189,7 +189,7 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-    <section class="markdown-content"><h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>菜狗之前部署了一个Tomcat应用，渗透测试不通过，在此记录一下风险内容以及解决方案</p>
+    <section class="markdown-content"><h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>小迅之前部署了一个Tomcat应用，渗透测试不通过，在此记录一下风险内容以及解决方案</p>
 <h1 id="测试结果"><a href="#测试结果" class="headerlink" title="测试结果"></a>测试结果</h1><table>
 <thead>
 <tr>
@@ -247,7 +247,7 @@
 <li>优点：从根源上解决问题，对此服务器下的所有网站都生效</li>
 <li>缺点：改动操作比较繁琐，毕竟要修改官方提供的jar包嘛，而且如果中间件有升级，还得再来一遍</li>
 </ul>
-<h2 id="二、Tomcat样例目录泄漏"><a href="#二、Tomcat样例目录泄漏" class="headerlink" title="二、Tomcat样例目录泄漏"></a>二、Tomcat样例目录泄漏</h2><p>直接删除<code>webapps</code>下的<code>examples</code>和<code>docs</code>等目录，菜狗进行操作之后，只留下了ROOT和应用目录，亲测不影响应用运行</p>
+<h2 id="二、Tomcat样例目录泄漏"><a href="#二、Tomcat样例目录泄漏" class="headerlink" title="二、Tomcat样例目录泄漏"></a>二、Tomcat样例目录泄漏</h2><p>直接删除<code>webapps</code>下的<code>examples</code>和<code>docs</code>等目录，小迅进行操作之后，只留下了ROOT和应用目录，亲测不影响应用运行</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
 <li>安全意识很重要，稳定为先，不管是开发还是运维，要时刻把安全放在第一位</li>
 <li>直接把应用端口暴露出来，虽然比直接暴露主机好，但也存在中间件方面的安全隐患。当你需要在公网暴露东西的时候，记得加上路径控制</li>
